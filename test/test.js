@@ -198,6 +198,8 @@ describe('todos', () => {
     it('should not change the counter', (done) => {
       todos.delete('00001', (err) => {
         const counterFileContents = fs.readFileSync(counter.counterFile).toString();
+
+        console.log('delete spec counter output => ', counterFileContents);
         expect(counterFileContents).to.equal('00001');
         done();
       });
@@ -206,6 +208,8 @@ describe('todos', () => {
     it('should delete todo file by id', (done) => {
       todos.delete('00001', (err) => {
         const todoExists = fs.existsSync(path.join(todos.dataDir, '00001.txt'));
+
+        console.log('delete spec todoExists output => ', todoExists);
         expect(todoExists).to.be.false;
         done();
       });

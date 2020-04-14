@@ -78,24 +78,42 @@ exports.readOne = (id, callback) => {
 
 exports.update = (id, text, callback) => {
   var filePath = path.join(exports.dataDir, `${id}.txt`);
-  fs.writeFile(filePath, text, (error) => {
+  // var fileExists = fs.existsSync(filePath);
+
+  fs.access(filePath, (error) => {
     if (error) {
       callback(error);
     } else {
-      callback(null, { id, text });
+      fs.writeFile(filePath, text, (error) => {
+        if (error) {
+          callback(error);
+        } else {
+          callback(null, { id, text });
+        }
+      })
     }
-  })
+  });
+
+  // console.log('Update: check if file exists => ', fileExists);
+
+  // if (fileExists) {
+  // } else {
+  //   callback(null);
+  // }
 };
 
 exports.delete = (id, callback) => {
-  var item = items[id];
-  delete items[id];
-  if (!item) {
-    // report an error if item not found
-    callback(new Error(`No item with id: ${id}`));
-  } else {
-    callback();
-  }
+  // Build out path using id
+  // Use fs.unlink() to remove the file
+  var filePath = path.join(exports.dataDir, `${id}.txt`);
+  fs.unlink(filePath, (error) => {
+    if (error) {
+      callback(error);
+    } else {
+      callback(null);
+    }
+  });
+
 };
 
 // Config+Initialization code -- DO NOT MODIFY /////////////////////////////////
