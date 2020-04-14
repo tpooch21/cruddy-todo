@@ -38,13 +38,20 @@ const writeCounter = (count, callback) => {
 
 // Public API - Fix this function //////////////////////////////////////////////
 
-exports.getNextUniqueId = () => {
-  counter = counter + 1;
-  return zeroPaddedNumber(counter);
+exports.getNextUniqueId = (callback) => {
+  readCounter((error, count) => {
+    writeCounter(count + 1, (error, id) => {
+      callback(error, id);
+    });
+  });
+
 };
 
-
+// getNextUniqueId can read file contents of data/counter.txt
+// If successful, callback (writeFile) will be called with data from readFile, callback as arguments
+// Maybe writeFile callback can be zeroPadded number function, taking data as argument
 
 // Configuration -- DO NOT MODIFY //////////////////////////////////////////////
 
 exports.counterFile = path.join(__dirname, 'counter.txt');
+// data/counter.txt
